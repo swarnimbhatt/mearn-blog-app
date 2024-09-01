@@ -1,1 +1,1 @@
-# mearn-blog-app
+# mern-blog-app
