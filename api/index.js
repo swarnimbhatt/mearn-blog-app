@@ -4,19 +4,22 @@ const express = require("express");
 const app = express();
 
 const cors = require("cors");
-app.use(cors());
+app.use(cors({credentials: true, origin: "http://localhost:3000"}));
 app.use(express.json());
 
 const User = require("./models/User");
 
 const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync();
+const secret = "br937frg9i3ug9fu3b9urgf7gh04fgh93grf97928456726gc9ervube";
 
 const mongoUsername = "XXXXXXXXXXXXXXX";
 const mongoPassword = "XXXXXXXXXXXXXXX";
 const mongoCluster = "XXXXXXXXXXXXXXX";
 const mongoConnString = `mongodb+srv://${mongoUsername}:${mongoPassword}@cluster0.68qmd.mongodb.net/?retryWrites=true&w=majority&appName=${mongoCluster}`;
 mongoose.connect(mongoConnString);
+
+const jwt = require("jsonwebtoken");
 
 app.get("/", (req, resp) => {
     resp.json("test ok");
@@ -27,7 +30,11 @@ app.post("/login", async (req, resp) => {
     const userDoc = await User.findOne({username});
     const isPasswordVerified = bcrypt.compareSync(password, userDoc.password);
     if(isPasswordVerified){
-        resp.status(200).json("Correct credentials.")
+        jwt.sign({username, id: userDoc._id}, secret, {}, (err, token) => {
+            if (err) throw err;
+            resp.cookie("token", token).json("ok");
+        });
+        
     }
     else{
         resp.status(400).json("Wrong credentials.")

@@ -9,7 +9,8 @@ export default function LoginPage() {
         const resp = await fetch("http://localhost:4000/login", {
             method: "POST",
             body: JSON.stringify({ username, password }),
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
         });
         if (resp.status == 200) {
             alert("Login successfull.")
