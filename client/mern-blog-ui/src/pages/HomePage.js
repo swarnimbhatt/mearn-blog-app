@@ -13,7 +13,9 @@ export default function HomePage() {
     }, []);
     return (
         <>
-            {posts.length > 0 ? <div>Posts exist</div>: <div>Posts dont exist</div>}
+        {posts.length > 0  && posts.map((item, index) => (
+          <Post key={index} {...item} />
+        ))}
         </>
     );
 }
