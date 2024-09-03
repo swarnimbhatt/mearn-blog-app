@@ -11,6 +11,7 @@ app.use(express.json());
 
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync();
@@ -50,10 +51,10 @@ app.post("/login", async (req, resp) => {
             resp.status(400).json("Wrong credentials.")
         }
     }
-    else{
+    else {
         resp.status(400).json("User does not exist.")
     }
-    
+
 });
 
 app.post("/register", async (req, resp) => {
@@ -90,8 +91,7 @@ app.post("/create_post", uploadMiddleware.single('file'), (req, resp) => {
     const { token } = req.cookies;
     if (token)
         jwt.verify(token, secret, {}, async (err, info) => {
-            if (err) throw err;
-console.log(info)
+            if (err) throw err;         
             //storing file in uploads
             const { originalname, path } = req.file;
             const fileExtension = originalname.split(".")[1];
@@ -115,18 +115,15 @@ console.log(info)
 });
 
 app.get("/posts", async (req, resp) => {
-    const { token } = req.cookies;
-    // if (token){
-    //     jwt.verify(token, secret, {}, async (err, info) => {
-    //         const posts = resp.json(await Post.find());
-    //         posts.map( (post) => {
-    //         })
-    //     });
-    // }
-    // else{
-        resp.json(await Post.find());
-    // }
-    
+    resp.json(await Post.find().populate("author", ["username"])
+        .sort({ createdAt: -1 })
+        .limit(20)
+    );
+});
+
+app.get("/post/:id", async (req, resp) => {
+    const { id } = req.params;
+    resp.json(await Post.findById(id).populate("author", ["username"]));
 });
 
 app.listen(4000);
