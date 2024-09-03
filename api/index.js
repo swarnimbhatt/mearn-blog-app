@@ -107,5 +107,9 @@ app.post("/create_post", uploadMiddleware.single('file'), (req, resp) => {
         resp.json("Unauthorized access denied");
 });
 
+app.get("/posts", async (req, resp) => {
+    resp.json(await Post.find());
+});
+
 app.listen(4000);
 
