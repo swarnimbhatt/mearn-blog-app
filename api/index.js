@@ -114,31 +114,39 @@ app.post("/post", uploadMiddleware.single('file'), (req, resp) => {
         resp.json("Unauthorized access denied");
 });
 
-app.put("/post", uploadMiddleware.single('file'), (req, resp) => {
-    // const { token } = req.cookies;
-    // if (token)
-    //     jwt.verify(token, secret, {}, async (err, info) => {
-    //         if (err) throw err;         
-    //         //storing file in uploads
-    //         const { originalname, path } = req.file;
-    //         const fileExtension = originalname.split(".")[1];
-    //         const newPath = path + "." + fileExtension;
-    //         fs.renameSync(path, newPath);
+app.put("/post/:id", uploadMiddleware.single('file'), (req, resp) => {
+    const { token } = req.cookies;
+    const { id } = req.params;
+   
+    if (token)
+        jwt.verify(token, secret, {}, async (err, info) => {
+            if (err) throw err;         
+            //storing file in uploads
+            const { originalname, path } = req.file;
+            const fileExtension = originalname.split(".")[1];
+            const newPath = path + "." + fileExtension;
+            fs.renameSync(path, newPath);
+            
 
-    //         //create post entry
-    //         const { title, summary, content } = req.body;
-    //         const PostDoc = await Post.create({
-    //             title,
-    //             summary,
-    //             content,
-    //             cover: newPath,
-    //             author: info.id,
-    //         });
+            //update post entry
+            const { title, summary, content } = req.body;
+            const postDoc = await Post.findById(id);
+            fs.unlinkSync(postDoc.cover);
+            const isAuthor = JSON.stringify(postDoc.author) == JSON.stringify(info.id);
+            if(!isAuthor)
+                return resp.status(400).json("You are not the author.");
 
-    //         resp.json(PostDoc);
-    //     });
-    // else
-    //     resp.json("Unauthorized access denied");
+            await postDoc.updateOne({
+                title,
+                summary,
+                content,
+                cover: newPath,
+            });
+
+            resp.json(postDoc);
+        });
+    else
+        resp.json("Unauthorized access denied");
 });
 
 app.get("/posts", async (req, resp) => {

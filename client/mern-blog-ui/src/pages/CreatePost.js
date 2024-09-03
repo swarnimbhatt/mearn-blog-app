@@ -55,9 +55,9 @@ export default function CreatePost() {
         data.set("summary", summary);
         data.set("content", content);
         data.set("file", thumbnail[0]);
-
-
-        const resp = await fetch("http://localhost:4000/post", {
+        
+        const apiUrl = "http://localhost:4000/post" + (id ? `/${id}` : "");
+        const resp = await fetch(apiUrl, {
             method: id ? "PUT" : "POST",
             body: data,
             credentials: "include",
