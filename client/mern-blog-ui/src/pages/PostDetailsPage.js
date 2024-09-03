@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom";
+import { useEffect, useState, useContext } from "react"
+import { Link, useParams } from "react-router-dom";
+import { UserContext } from "../UserContext";
 
 export default function PostDetailsPage() {
+    const { userInfo } = useContext(UserContext);
     const { id } = useParams();
-
     const [postInfo, setpostInfo] = useState(null);
 
     useEffect(() => {
@@ -27,14 +28,22 @@ export default function PostDetailsPage() {
             <div className="post-info">
                 <h1 className="post-title">{postInfo.title}</h1>
                 <div className="post-metadata">
-                    <div>{postInfo.author.username}</div>
+                    {userInfo.username === postInfo.author.username
+                        ?
+                        <div>
+                            <div><span>Authored by </span><span>You</span></div>
+                            <Link to={`/create_post/${id}`}>Edit post</Link>
+                        </div>
+                        :
+                        <div><span>Authored by </span><span>{postInfo.author.username}</span></div>
+                    }
 
                     <div>{postInfo.createdAt}</div>
                 </div>
                 <div className="post-summmary">
                     {postInfo.summary}
                 </div>
-                <div dangerouslySetInnerHTML={{__html: postInfo.content}} className="post-summmary" />
+                <div dangerouslySetInnerHTML={{ __html: postInfo.content }} className="post-summmary" />
             </div>
         </div>
     )

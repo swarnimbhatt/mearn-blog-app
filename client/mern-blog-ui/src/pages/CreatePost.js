@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
 export default function CreatePost() {
     const [title, setTitle] = useState("");
@@ -10,6 +10,24 @@ export default function CreatePost() {
     const [files, setFile] = useState("");
 
     const [redirect, setRedirect] = useState(false);
+
+    const { id } = useParams();
+    useEffect( () => {
+        if(id){
+            fetch(`http://localhost:4000/post/${id}`, {
+                method: "GET",
+                credentials: "include",
+            })
+                .then(resp => {
+                    resp.json().then(post => {
+                        setTitle(post.title);
+                        setSummary(post.summary);
+                        setContent(post.content);
+                        setFile(post.file);
+                    });
+                });
+        }
+    }, []);
 
     async function createNewPost(e) {
         const data = new FormData();
