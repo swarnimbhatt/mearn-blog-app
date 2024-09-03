@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import { Navigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ export default function CreatePost() {
         data.set("file", files[0]);
 
         e.preventDefault();
-        const resp = await fetch("http://localhost:4000/create_post", {
+        const resp = await fetch("http://localhost:4000/post", {
             method: "POST",
             body: data,
             credentials: "include",

@@ -24,9 +24,9 @@ function App() {
 
           <Route path={'/create_post'} element={<CreatePost />} />
 
-          <Route path={'/post/:id'} element={<PostDetailsPage />} />
-
           <Route path={'/create_post/:id'} element={<CreatePost />} />
+
+          <Route path={'/post/:id'} element={<PostDetailsPage />} />
 
         </Route>
 

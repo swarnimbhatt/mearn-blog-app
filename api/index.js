@@ -87,7 +87,7 @@ app.post("/logout", (req, resp) => {
     resp.cookie("token", "").json("ok");
 });
 
-app.post("/create_post", uploadMiddleware.single('file'), (req, resp) => {
+app.post("/post", uploadMiddleware.single('file'), (req, resp) => {
     const { token } = req.cookies;
     if (token)
         jwt.verify(token, secret, {}, async (err, info) => {
@@ -112,6 +112,33 @@ app.post("/create_post", uploadMiddleware.single('file'), (req, resp) => {
         });
     else
         resp.json("Unauthorized access denied");
+});
+
+app.put("/post", uploadMiddleware.single('file'), (req, resp) => {
+    // const { token } = req.cookies;
+    // if (token)
+    //     jwt.verify(token, secret, {}, async (err, info) => {
+    //         if (err) throw err;         
+    //         //storing file in uploads
+    //         const { originalname, path } = req.file;
+    //         const fileExtension = originalname.split(".")[1];
+    //         const newPath = path + "." + fileExtension;
+    //         fs.renameSync(path, newPath);
+
+    //         //create post entry
+    //         const { title, summary, content } = req.body;
+    //         const PostDoc = await Post.create({
+    //             title,
+    //             summary,
+    //             content,
+    //             cover: newPath,
+    //             author: info.id,
+    //         });
+
+    //         resp.json(PostDoc);
+    //     });
+    // else
+    //     resp.json("Unauthorized access denied");
 });
 
 app.get("/posts", async (req, resp) => {
