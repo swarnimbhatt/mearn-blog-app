@@ -6,6 +6,6 @@ const UserSchema = new Schema({
     password: { type: String, required: true, min: 4 },
 });
 
-const UserModal = model("User", UserSchema);
+const UserModel = model("User", UserSchema);
 
-module.exports = UserModal;
+module.exports = UserModel;

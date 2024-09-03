@@ -31,7 +31,7 @@ export default function Header() {
                 {username && (
                     <>
                         <span>{username}</span>
-                        <a href="/create">Create new post</a>
+                        <a href="/create_post">Create new post</a>
                         <a onClick={logoutUser}>logout</a>
                     </>
                 )}
