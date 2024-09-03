@@ -34,20 +34,26 @@ app.get("/", (req, resp) => {
 app.post("/login", async (req, resp) => {
     const { username, password } = req.body;
     const userDoc = await User.findOne({ username });
-    const isPasswordVerified = bcrypt.compareSync(password, userDoc.password);
-    if (isPasswordVerified) {
-        jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
-            if (err) throw err;
-            resp.cookie("token", token).json({
-                id: userDoc._id,
-                username,
+    if (userDoc) {
+        const isPasswordVerified = bcrypt.compareSync(password, userDoc.password ? userDoc.password : null);
+        if (isPasswordVerified) {
+            jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
+                if (err) throw err;
+                resp.cookie("token", token).json({
+                    id: userDoc._id,
+                    username,
+                });
             });
-        });
 
+        }
+        else {
+            resp.status(400).json("Wrong credentials.")
+        }
     }
-    else {
-        resp.status(400).json("Wrong credentials.")
+    else{
+        resp.status(400).json("User does not exist.")
     }
+    
 });
 
 app.post("/register", async (req, resp) => {
@@ -85,7 +91,7 @@ app.post("/create_post", uploadMiddleware.single('file'), (req, resp) => {
     if (token)
         jwt.verify(token, secret, {}, async (err, info) => {
             if (err) throw err;
-
+console.log(info)
             //storing file in uploads
             const { originalname, path } = req.file;
             const fileExtension = originalname.split(".")[1];
@@ -93,12 +99,13 @@ app.post("/create_post", uploadMiddleware.single('file'), (req, resp) => {
             fs.renameSync(path, newPath);
 
             //create post entry
-            const {title, summary, content} = req.body;
+            const { title, summary, content } = req.body;
             const PostDoc = await Post.create({
                 title,
                 summary,
                 content,
                 cover: newPath,
+                author: info.id,
             });
 
             resp.json(PostDoc);
@@ -108,7 +115,18 @@ app.post("/create_post", uploadMiddleware.single('file'), (req, resp) => {
 });
 
 app.get("/posts", async (req, resp) => {
-    resp.json(await Post.find());
+    const { token } = req.cookies;
+    // if (token){
+    //     jwt.verify(token, secret, {}, async (err, info) => {
+    //         const posts = resp.json(await Post.find());
+    //         posts.map( (post) => {
+    //         })
+    //     });
+    // }
+    // else{
+        resp.json(await Post.find());
+    // }
+    
 });
 
 app.listen(4000);
