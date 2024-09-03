@@ -131,11 +131,11 @@ app.put("/post/:id", uploadMiddleware.single('file'), (req, resp) => {
             //update post entry
             const { title, summary, content } = req.body;
             const postDoc = await Post.findById(id);
-            fs.unlinkSync(postDoc.cover);
             const isAuthor = JSON.stringify(postDoc.author) == JSON.stringify(info.id);
             if(!isAuthor)
                 return resp.status(400).json("You are not the author.");
 
+            fs.unlinkSync(postDoc.cover);
             await postDoc.updateOne({
                 title,
                 summary,
@@ -159,6 +159,28 @@ app.get("/posts", async (req, resp) => {
 app.get("/post/:id", async (req, resp) => {
     const { id } = req.params;
     resp.json(await Post.findById(id).populate("author", ["username"]));
+});
+
+app.delete("/post/:id", async (req, resp) => {
+    const { token } = req.cookies;
+    const { id } = req.params;
+   
+    if (token)
+        jwt.verify(token, secret, {}, async (err, info) => {
+            if (err) throw err;         
+
+            const postDoc = await Post.findById(id);
+            const isAuthor = JSON.stringify(postDoc.author) == JSON.stringify(info.id);
+            if(!isAuthor)
+                return resp.status(400).json("You are not the author.");
+
+            fs.unlinkSync(postDoc.cover);
+            await postDoc.deleteOne();
+
+            resp.json("Post deleted");
+        });
+    else
+        resp.json("Unauthorized access denied");
 });
 
 app.listen(4000);

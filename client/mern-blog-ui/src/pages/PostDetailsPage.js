@@ -1,11 +1,12 @@
 import { useEffect, useState, useContext } from "react"
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
 export default function PostDetailsPage() {
     const { userInfo } = useContext(UserContext);
     const { id } = useParams();
     const [postInfo, setpostInfo] = useState(null);
+    const [redirect, setRedirect] = useState(false);
 
     useEffect(() => {
         fetch(`http://localhost:4000/post/${id}`, {
@@ -18,6 +19,27 @@ export default function PostDetailsPage() {
                 });
             });
     }, []);
+
+    async function deletePost(){
+        const resp = await fetch(`http://localhost:4000/post/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include",
+        });
+        if (resp.ok) {
+            setRedirect(true);
+        }
+        else {
+            alert("Deletion failed. Please try again later.")
+        }
+    }
+
+    if (redirect) {
+        return <Navigate to={"/"} />
+    }
+
     if (!postInfo) return '';
 
     return (
@@ -33,6 +55,7 @@ export default function PostDetailsPage() {
                         <div>
                             <div><span>Authored by </span><span>You</span></div>
                             <Link to={`/create_post/${id}`}>Edit post</Link>
+                            <a onClick={deletePost}>Delete post</a>
                         </div>
                         :
                         <div><span>Authored by </span><span>{postInfo.author.username}</span></div>
