@@ -1,4 +1,5 @@
-import { MESSAGES } from './MsgConstants';
+import { MESSAGES } from '../MsgConstants';
+
 export default function InlineError({group, errorType, PrefixMsg, SuffixMsg, active}) {
     if(!active)
         return '';

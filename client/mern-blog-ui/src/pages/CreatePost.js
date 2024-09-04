@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import { Navigate, useParams } from 'react-router-dom';
-import InlineError from '../InlineError';
+import InlineError from '../components/InlineError';
 
 export default function CreatePost() {
     const [title, setTitle] = useState("");
