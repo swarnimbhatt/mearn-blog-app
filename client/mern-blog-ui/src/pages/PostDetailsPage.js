@@ -50,7 +50,7 @@ export default function PostDetailsPage() {
             <div className="post-info">
                 <h1 className="post-title">{postInfo.title}</h1>
                 <div className="post-metadata">
-                    {userInfo.username === postInfo.author.username
+                    {userInfo && userInfo.username === postInfo.author.username
                         ?
                         <div>
                             <div><span>Authored by </span><span>You</span></div>
