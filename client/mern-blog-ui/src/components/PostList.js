@@ -16,7 +16,7 @@ export default function PostList() {
 
 
     return (
-        <div className="">
+        <div className="masonry-layout">
             {posts.map((item, index) => (
                 <Post key={index} {...item} />
             ))}

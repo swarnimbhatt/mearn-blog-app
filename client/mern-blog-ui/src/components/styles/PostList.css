@@ -1,0 +1,23 @@
+.masonry-layout {
+    column-count: 3; /* Number of columns */
+    column-gap: 1rem; /* Spacing between the columns */
+    padding: 20px;
+}
+
+.masonry-layout > * {
+    break-inside: avoid; /* Prevents breaking inside columns */
+    margin-bottom: 1rem; /* Space between the items */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 1200px) {
+    .masonry-layout {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 768px) {
+    .masonry-layout {
+        column-count: 1;
+    }
+}
