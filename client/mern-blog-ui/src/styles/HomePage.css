@@ -1,0 +1,14 @@
+.post-list-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 60px); /* Adjust based on header height */
+    padding: 20px;
+    background-color: #f8f9fa; /* Optional: background color for better visibility */
+}
+
+.post-list-container > * {
+    max-width: 85%;
+    width: 100%;
+    box-sizing: border-box;
+}

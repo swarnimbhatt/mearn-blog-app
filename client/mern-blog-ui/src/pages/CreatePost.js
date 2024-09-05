@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'
+import 'react-quill/dist/quill.snow.css';
 import { Navigate, useParams } from 'react-router-dom';
 import InlineError from '../components/InlineError';
+import '../styles/CreatePost.css';
 
 export default function CreatePost() {
     const [title, setTitle] = useState("");
     const [summary, setSummary] = useState("");
     const [content, setContent] = useState("");
-    const [thumbnail, setFile] = useState(null);
+    const [thumbnail, setThumbnail] = useState(null);
     const [errorMsgMap, setErrorMsgMap] = useState({
         title: false,
         summary: false,
@@ -25,26 +26,27 @@ export default function CreatePost() {
                 method: "GET",
                 credentials: "include",
             })
-                .then(resp => {
-                    resp.json().then(post => {
-                        setTitle(post.title);
-                        setSummary(post.summary);
-                        setContent(post.content);
-                        setFile(post.file);
-                    });
+                .then(resp => resp.json())
+                .then(post => {
+                    setTitle(post.title);
+                    setSummary(post.summary);
+                    setContent(post.content);
+                    setThumbnail(post.file);
                 });
         }
-    }, []);
+    }, [id]);
+
     function formValidation() {
         const errorStates = {
             title: !(title && title.trim()),
             summary: !(summary && summary.trim()),
             content: !(content && content.trim()),
-            thumbnail: !(thumbnail)
+            thumbnail: !(thumbnail && thumbnail[0])
         };
         setErrorMsgMap(errorStates);
         return !Object.values(errorStates).includes(true);
     }
+
     async function createNewPost(e) {
         e.preventDefault();
         if (!formValidation())
@@ -55,7 +57,7 @@ export default function CreatePost() {
         data.set("summary", summary);
         data.set("content", content);
         data.set("file", thumbnail[0]);
-        
+
         const apiUrl = "http://localhost:4000/post" + (id ? `/${id}` : "");
         const resp = await fetch(apiUrl, {
             method: id ? "PUT" : "POST",
@@ -64,25 +66,28 @@ export default function CreatePost() {
         });
         if (resp.ok) {
             setRedirect(true);
-        }
-        else {
-            alert("Login failed. Please try again later.")
+        } else {
+            alert("Submission failed. Please try again later.");
         }
     }
 
     if (redirect) {
-        return <Navigate to={"/"} />
+        return <Navigate to={"/"} />;
     }
+
     return (
-        <>
-            <div>Create your new post</div>
-            <form onSubmit={createNewPost}>
-                <div>
+        <div className="create-post-container">
+            <h1 className="create-post-title">{id ? "Edit Post" : "Create New Post"}</h1>
+            <form onSubmit={createNewPost} className="create-post-form">
+                <div className="form-group">
+                    <label htmlFor="title">Title</label>
                     <input
                         type="text"
-                        placeholder="Title"
+                        id="title"
+                        placeholder="Enter post title"
                         value={title}
                         onChange={e => setTitle(e.target.value)}
+                        className="form-input"
                     />
                     <InlineError
                         group="FORM_VALIDATION"
@@ -91,12 +96,15 @@ export default function CreatePost() {
                     />
                 </div>
 
-                <div>
+                <div className="form-group">
+                    <label htmlFor="summary">Summary</label>
                     <input
                         type="text"
-                        placeholder="Summary"
+                        id="summary"
+                        placeholder="Enter post summary"
                         value={summary}
                         onChange={e => setSummary(e.target.value)}
+                        className="form-input"
                     />
                     <InlineError
                         group="FORM_VALIDATION"
@@ -105,10 +113,13 @@ export default function CreatePost() {
                     />
                 </div>
 
-                <div>
+                <div className="form-group">
+                    <label htmlFor="thumbnail">Thumbnail</label>
                     <input
                         type="file"
-                        onChange={e => setFile(e.target.files)}
+                        id="thumbnail"
+                        onChange={e => setThumbnail(e.target.files)}
+                        className="form-input-file"
                     />
                     <InlineError
                         group="FORM_VALIDATION"
@@ -117,10 +128,12 @@ export default function CreatePost() {
                     />
                 </div>
 
-                <div>
+                <div className="form-group">
+                    <label htmlFor="content">Content</label>
                     <ReactQuill
                         value={content}
                         onChange={setContent}
+                        className="quill-editor"
                     />
                     <InlineError
                         group="FORM_VALIDATION"
@@ -129,10 +142,10 @@ export default function CreatePost() {
                     />
                 </div>
 
-                <button type="submit">
-                    {id ? "Update post" : "Create post"}
+                <button type="submit" className="submit-button">
+                    {id ? "Update Post" : "Create Post"}
                 </button>
             </form>
-        </>
+        </div>
     );
 }
