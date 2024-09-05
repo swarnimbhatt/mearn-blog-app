@@ -1,31 +1,30 @@
 .user-avatar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px; /* Size of the avatar */
-    height: 40px; /* Size of the avatar */
-    border-radius: 50%;
-    overflow: hidden;
-    background-color: #f1f1f1; /* Background color for the initials */
-    color: #333; /* Text color for the initials */
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-    user-select: none;
-  }
-  
-  .avatar-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .avatar-initials {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-  }
-  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--input-background);
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: var(--box-shadow);
+  user-select: none;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}

@@ -1,69 +1,72 @@
 .create-post-container {
     max-width: 900px;
     margin: auto;
-    padding: 40px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    padding: var(--padding);
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
     position: relative;
 }
 
 .create-post-title {
     font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: var(--margin);
+    color: var(--text-color);
     text-align: center;
 }
 
 .create-post-form {
     display: flex;
     flex-direction: column;
-    gap: 30px; /* Increased gap between form elements */
+    gap: 30px;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Space between label and input */
+    gap: 10px;
 }
 
 .form-group label {
     font-size: 1.1rem;
-    color: #444;
+    color: var(--text-color);
 }
 
 .form-input, .form-input-file {
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    padding: var(--padding);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
     font-size: 1rem;
     outline: none;
-    transition: border-color 0.3s;
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    box-shadow: var(--box-shadow);
 }
 
 .form-input:focus, .form-input-file:focus {
-    border-color: #007bff;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 4px var(--primary-color);
 }
 
 .quill-editor {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    height: 300px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
 }
 
 .submit-button {
-    background-color: #007bff;
-    color: #ffffff;
-    padding: 15px 25px; /* Increased padding for button */
+    background: linear-gradient(145deg, var(--primary-color), var(--secondary-color));
+    color: var(--button-text);
+    padding: 15px 25px;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     font-size: 1.1rem;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color var(--transition-speed);
     align-self: center;
-    margin-top: 30px; /* Increased spacing above the button */
+    margin-top: 30px;
+    box-shadow: var(--box-shadow);
 }
 
 .submit-button:hover {
-    background-color: #0056b3;
+    background-color: var(--secondary-color);
+    transform: scale(1.05);
 }

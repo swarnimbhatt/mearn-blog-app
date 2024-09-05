@@ -3,41 +3,45 @@
     flex-direction: column;
     max-width: 800px;
     margin: auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    padding: var(--padding);
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
     overflow: hidden;
 }
 
 .post-thumbnail {
-    margin-bottom: 20px;
+    margin-bottom: var(--margin);
 }
 
 .post-thumbnail img {
     width: 100%;
     height: auto;
-    border-radius: 12px;
+    border-radius: var(--border-radius);
     object-fit: cover;
 }
 
 .post-content {
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
+    padding: var(--padding);
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
 }
 
 .post-title {
     font-size: 2.2rem;
-    margin-bottom: 10px;
-    color: #333;
+    margin-bottom: var(--margin);
+    color: var(--text-color);
+    font-weight: 700;
 }
 
 .post-metadata {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px;
-    color: #666;
+    margin-bottom: var(--margin);
+    color: var(--secondary-text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--margin);
 }
 
 .post-metadata span {
@@ -46,24 +50,25 @@
 
 .author-name {
     font-weight: bold;
-    color: #007bff;
+    color: var(--primary-color);
 }
 
 .post-actions {
-    margin-top: 10px;
+    margin-top: var(--margin);
 }
 
 .edit-link {
     display: inline-block;
-    margin-right: 15px;
+    margin-right: var(--gap);
     font-size: 14px;
     text-decoration: none;
-    color: #007bff;
-    transition: color 0.3s;
+    color: var(--primary-color);
+    transition: color var(--transition-speed), text-shadow var(--transition-speed);
 }
 
 .edit-link:hover {
-    color: #0056b3;
+    color: var(--secondary-color);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .delete-button {
@@ -81,21 +86,23 @@
 
 .post-date {
     font-size: 0.9rem;
-    color: #999;
-    margin-top: 10px;
+    color: var(--secondary-text-color);
+    margin-top: var(--margin);
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--margin);
 }
 
 .post-summary {
-    margin-bottom: 20px;
+    margin-bottom: var(--margin);
 }
 
 .post-summary p {
     font-size: 1.1rem;
-    color: #444;
+    color: var(--text-color);
 }
 
 .post-body {
     font-size: 1rem;
-    color: #333;
-    line-height: 1.6;
+    color: var(--text-color);
+    line-height: 1.8;
 }

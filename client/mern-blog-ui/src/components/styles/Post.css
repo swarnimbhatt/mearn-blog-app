@@ -1,14 +1,14 @@
 .card-container {
   display: block;
   width: 100%;
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   overflow: hidden;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  background-color: white;
-  margin-bottom: 16px;
-  transition: transform 0.2s ease-in-out;
+  box-shadow: var(--box-shadow);
+  background-color: var(--background-color);
+  margin-bottom: var(--margin);
+  transition: transform var(--transition-speed) ease-in-out;
   text-decoration: none;
-  color: inherit;
+  color: var(--text-color);
 }
 
 .card-container:hover {
@@ -44,8 +44,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 10px;
-  color: white;
+  padding: var(--padding);
+  color: var(--button-text);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -54,24 +54,24 @@
 }
 
 .card-content {
-  padding: 15px;
+  padding: var(--padding);
   width: 100%;
 }
 
 .card-content h2 {
   font-size: 18px;
   margin-bottom: 10px;
-  color: #333;
+  color: var(--text-color);
 }
 
 .card-content p {
   font-size: 14px;
-  color: #555;
+  color: var(--secondary-text-color);
   margin-bottom: 10px;
 }
 
 .read-more {
-  color: #0073e6;
+  color: var(--primary-color);
   font-weight: bold;
   display: inline-flex;
   align-items: center;
@@ -81,7 +81,7 @@
 
 .read-more span {
   margin-left: 5px;
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-speed) ease;
 }
 
 .read-more:hover span {
