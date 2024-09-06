@@ -1,3 +1,4 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
@@ -15,15 +16,17 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 
 const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync();
-const secret = "br937frg9i3ug9fu3b9urgf7gh04fgh93grf97928456726gc9ervube";
 
-
-const { mongoUsername, mongoPassword, mongoCluster } = require("./config");
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+const mongoUsername = process.env.MONGO_USERNAME;
+const mongoPassword = process.env.MONGO_PASSWORD;
+const mongoCluster = process.env.MONGO_CLUSTER;
 const mongoConnString = `mongodb+srv://${mongoUsername}:${mongoPassword}@cluster0.68qmd.mongodb.net/?retryWrites=true&w=majority&appName=${mongoCluster}`;
 mongoose.connect(mongoConnString);
 
 const multer = require("multer");
-const uploadMiddleware = multer({ dest: "uploads/" });
+const uploadMiddlewarePosts = multer({ dest: "uploads/posts/" });
+const uploadMiddlewareUsers = multer({ dest: "uploads/users/" });
 
 const User = require("./models/User");
 const Post = require("./models/Post");
@@ -38,14 +41,19 @@ app.post("/login", async (req, resp) => {
     if (userDoc) {
         const isPasswordVerified = bcrypt.compareSync(password, userDoc.password ? userDoc.password : null);
         if (isPasswordVerified) {
-            jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
-                if (err) throw err;
-                resp.cookie("token", token).json({
-                    id: userDoc._id,
-                    username,
-                });
-            });
-
+            jwt.sign(
+                { username, id: userDoc._id },
+                accessTokenSecret,
+                // { expiresIn: "30s" },
+                {},
+                (err, token) => {
+                    if (err) throw err;
+                    resp.cookie("token", token).json({
+                        id: userDoc._id,
+                        username,
+                    });
+                }
+            );
         }
         else {
             resp.status(400).json("Wrong credentials.")
@@ -54,16 +62,26 @@ app.post("/login", async (req, resp) => {
     else {
         resp.status(400).json("User does not exist.")
     }
-
 });
 
-app.post("/register", async (req, resp) => {
-    const { username, password } = req.body;
+
+app.post("/register", uploadMiddlewareUsers.single("file") ,async (req, resp) => {
+    const { firstName, lastName, username, password } = req.body;
     try {
+        //storing file in uploads
+        const { originalname, path } = req.file;
+        const fileExtension = originalname.split(".")[1];
+        const newPath = path + "." + fileExtension;
+        fs.renameSync(path, newPath);
+
         const userDoc = await User.create({
+            firstName,
+            lastName,
             username,
-            password: bcrypt.hashSync(password, salt)
+            password: bcrypt.hashSync(password, salt),
+            profilePic: newPath
         });
+        
         resp.json(userDoc);
     }
     catch (e) {
@@ -74,7 +92,7 @@ app.post("/register", async (req, resp) => {
 app.get("/profile", (req, resp) => {
     const { token } = req.cookies;
     if (token)
-        jwt.verify(token, secret, {}, (err, info) => {
+        jwt.verify(token, accessTokenSecret, {}, (err, info) => {
             if (err) throw err;
             resp.json(info);
         });
@@ -87,11 +105,11 @@ app.post("/logout", (req, resp) => {
     resp.cookie("token", "").json("ok");
 });
 
-app.post("/post", uploadMiddleware.single('file'), (req, resp) => {
+app.post("/post", uploadMiddlewarePosts.single('file'), (req, resp) => {
     const { token } = req.cookies;
     if (token)
-        jwt.verify(token, secret, {}, async (err, info) => {
-            if (err) throw err;         
+        jwt.verify(token, accessTokenSecret, {}, async (err, info) => {
+            if (err) throw err;
             //storing file in uploads
             const { originalname, path } = req.file;
             const fileExtension = originalname.split(".")[1];
@@ -107,32 +125,30 @@ app.post("/post", uploadMiddleware.single('file'), (req, resp) => {
                 cover: newPath,
                 author: info.id,
             });
-
             resp.json(PostDoc);
         });
     else
         resp.json("Unauthorized access denied");
 });
 
-app.put("/post/:id", uploadMiddleware.single('file'), (req, resp) => {
+app.put("/post/:id", uploadMiddlewarePosts.single('file'), (req, resp) => {
     const { token } = req.cookies;
     const { id } = req.params;
-   
+
     if (token)
-        jwt.verify(token, secret, {}, async (err, info) => {
-            if (err) throw err;         
+        jwt.verify(token, accessTokenSecret, {}, async (err, info) => {
+            if (err) throw err;
             //storing file in uploads
             const { originalname, path } = req.file;
             const fileExtension = originalname.split(".")[1];
             const newPath = path + "." + fileExtension;
             fs.renameSync(path, newPath);
-            
 
             //update post entry
             const { title, summary, content } = req.body;
             const postDoc = await Post.findById(id);
             const isAuthor = JSON.stringify(postDoc.author) == JSON.stringify(info.id);
-            if(!isAuthor)
+            if (!isAuthor)
                 return resp.status(400).json("You are not the author.");
 
             fs.unlinkSync(postDoc.cover);
@@ -142,7 +158,6 @@ app.put("/post/:id", uploadMiddleware.single('file'), (req, resp) => {
                 content,
                 cover: newPath,
             });
-
             resp.json(postDoc);
         });
     else
@@ -164,14 +179,14 @@ app.get("/post/:id", async (req, resp) => {
 app.delete("/post/:id", async (req, resp) => {
     const { token } = req.cookies;
     const { id } = req.params;
-   
+
     if (token)
-        jwt.verify(token, secret, {}, async (err, info) => {
-            if (err) throw err;         
+        jwt.verify(token, accessTokenSecret, {}, async (err, info) => {
+            if (err) throw err;
 
             const postDoc = await Post.findById(id);
             const isAuthor = JSON.stringify(postDoc.author) == JSON.stringify(info.id);
-            if(!isAuthor)
+            if (!isAuthor)
                 return resp.status(400).json("You are not the author.");
 
             fs.unlinkSync(postDoc.cover);

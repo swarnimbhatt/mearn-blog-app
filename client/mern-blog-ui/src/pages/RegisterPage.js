@@ -7,15 +7,22 @@ export default function Register() {
         lastName: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        thumbnail: ''
     });
     const [error, setError] = useState('');
 
     function handleChange(e) {
         const { name, value } = e.target;
+        if(name!="thumbnail")
         setFormState(prevState => ({
             ...prevState,
             [name]: value
+        }));
+        else
+        setFormState(prevState => ({
+            ...prevState,
+            [name]: e.target.files[0]
         }));
     }
 
@@ -27,16 +34,17 @@ export default function Register() {
             setError("Passwords do not match.");
             return;
         }
+        const data = new FormData();
+        data.set("firstName", formState.firstName);
+        data.set("lastName", formState.lastName);
+        data.set("username", formState.email);
+        data.set("password", formState.password);
+        data.set("file", formState.thumbnail);
 
         const resp = await fetch("http://localhost:4000/register", {
             method: "POST",
-            body: JSON.stringify({
-                firstName: formState.firstName,
-                lastName: formState.lastName,
-                username: formState.email,
-                password: formState.password
-            }),
-            headers: { "Content-Type": "application/json" }
+            body: data,
+            // headers: { "Content-Type": "application/json" }
         });
 
         if (resp.ok) {
@@ -91,6 +99,11 @@ export default function Register() {
                         value={formState.confirmPassword}
                         onChange={handleChange}
                         required
+                    />
+                    <input
+                        type="file"
+                        name="thumbnail"
+                        onChange={handleChange}
                     />
                     <button type="submit">Register</button>
                 </form>

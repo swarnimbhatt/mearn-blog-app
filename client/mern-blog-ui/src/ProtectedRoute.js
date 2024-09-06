@@ -5,8 +5,7 @@ import { UserContext } from './UserContext';
 import { Navigate, Outlet } from 'react-router-dom';
 
 function ProtectedRoute() {
-    const { userInfo } = useContext(UserContext);
-  console.log(userInfo)
+  const { userInfo } = useContext(UserContext);
   return userInfo ? <Outlet /> : <Navigate to="/login" />;
 }
 
