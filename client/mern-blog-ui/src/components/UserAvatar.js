@@ -8,7 +8,7 @@ const UserAvatar = ({ src, alt, initials, onClick }) => {
   return (
     <div className="user-avatar" onClick={onClick}>
       {hasImage ? (
-        <img src={src} alt={alt} className="avatar-image" />
+        <img src={`http://localhost:4000/${src}`} alt={alt} className="avatar-image" />
       ) : (
         <div className="avatar-initials">{initials}</div>
       )}

@@ -30,6 +30,9 @@ export default function Header() {
     }
 
     const username = userInfo?.username;
+    const firstName = userInfo?.firstName;
+    const lastName = userInfo?.lastName;
+    const profilePic = userInfo?.profilePic;
 
     return (
         <header className="header">
@@ -61,7 +64,8 @@ export default function Header() {
                         </div>
                     </Link>
                     <ThemeSwitcher />
-                    <UserMenu username={username} show={""} />
+                    <UserMenu username={firstName} profilePic={profilePic} show={""} />
+                    {/* <img src={"http://localhost:4000/uploads/users/9a6d105aa992162173bc1571a17b9bb5.jpg"} /> */}
                 </div>
                 :
                 <div className="auth-buttons">

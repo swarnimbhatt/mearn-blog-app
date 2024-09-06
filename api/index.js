@@ -51,6 +51,9 @@ app.post("/login", async (req, resp) => {
                     resp.cookie("token", token).json({
                         id: userDoc._id,
                         username,
+                        firstName: userDoc.firstName, 
+                        secondName: userDoc.secondName, 
+                        profilePic: userDoc.profilePic,
                     });
                 }
             );
@@ -92,9 +95,14 @@ app.post("/register", uploadMiddlewareUsers.single("file") ,async (req, resp) =>
 app.get("/profile", (req, resp) => {
     const { token } = req.cookies;
     if (token)
-        jwt.verify(token, accessTokenSecret, {}, (err, info) => {
+        jwt.verify(token, accessTokenSecret, {}, async (err, info) => {
             if (err) throw err;
-            resp.json(info);
+            const username = info.username;
+            const userDoc = await User.findOne({ username });
+            if(!userDoc)
+                return resp.status(400).json("Invalid token.");
+            else
+                resp.json({...info, firstName: userDoc.firstName, secondName: userDoc.secondName, profilePic: userDoc.profilePic});
         });
     else
         resp.json("ok");
