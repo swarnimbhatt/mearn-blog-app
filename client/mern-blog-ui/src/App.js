@@ -10,6 +10,7 @@ import PostDetailsPage from './pages/PostDetailsPage';
 import { UserContextProvider } from './UserContext';
 import Layout from './components/Layout';
 import { ThemeProvider } from './Context/ThemeContext';
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
   return (
@@ -24,11 +25,12 @@ function App() {
 
             <Route path={'/register'} element={<Register />} />
 
-            <Route path={'/create_post'} element={<CreatePost />} />
-
-            <Route path={'/create_post/:id'} element={<CreatePost />} />
-
             <Route path={'/post/:id'} element={<PostDetailsPage />} />
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/create_post" element={<CreatePost />} />
+              <Route path={'/create_post/:id'} element={<CreatePost />} />
+            </Route>
 
           </Route>
 
