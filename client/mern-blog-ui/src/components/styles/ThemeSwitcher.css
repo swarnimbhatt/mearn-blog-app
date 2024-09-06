@@ -1,0 +1,75 @@
+.theme-switcher {
+    display: flex;
+    align-items: center;
+  }
+  
+  .theme-switcher input[type="checkbox"] {
+    display: none;
+  }
+  
+  .switch-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    width: 60px;
+    height: 34px;
+    background-color: #ddd;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  
+  .icon-container {
+    display: flex;
+    width: 200%;
+    height: 100%;
+    position: absolute;
+    transition: transform 0.3s ease;
+    align-items: center;
+  }
+  
+  .icon {
+    font-size: 16.8px Imp !important; /* Reduced size by 30% from 24px */
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+  }
+  
+  .sun-icon {
+    color: #f5c518;
+  }
+  
+  .moon-icon {
+    color: #f5f5f5;
+  }
+  
+  .theme-switcher input[type="checkbox"]:checked + .switch-label .icon-container {
+    transform: translateX(-50%);
+  }
+  
+  .sun-icon {
+    left: 0;
+  }
+  
+  .moon-icon {
+    right: 0;
+    transform: translateX(100%);
+  }
+  
+  .theme-switcher input[type="checkbox"]:checked + .switch-label .sun-icon {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  
+  .theme-switcher input[type="checkbox"]:checked + .switch-label .moon-icon {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
+  svg {
+    height: 25px !important;
+  }

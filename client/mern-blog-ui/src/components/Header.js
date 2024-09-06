@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import './styles/Header.css';
 import GLobalSearch from './GlobalSearch';
 import UserMenu from './UserMenu';
+import ThemeSwitcher from './ThemeSwitcher';
 
 export default function Header() {
     const { setUserInfo, userInfo } = useContext(UserContext);
@@ -59,10 +60,12 @@ export default function Header() {
                             <div className="dw l">Write</div>
                         </div>
                     </Link>
+                    <ThemeSwitcher />
                     <UserMenu username={username} show={""} />
                 </div>
                 :
                 <div className="auth-buttons">
+                    <ThemeSwitcher />
                     <Link to={"/login"} className="login">Log in</Link>
                     <Link to={"/register"} className="signup">Sign up</Link>
                 </div>

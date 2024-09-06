@@ -9,29 +9,32 @@ import CreatePost from './pages/CreatePost';
 import PostDetailsPage from './pages/PostDetailsPage';
 import { UserContextProvider } from './UserContext';
 import Layout from './components/Layout';
+import { ThemeProvider } from './Context/ThemeContext';
 
 function App() {
   return (
-    <UserContextProvider>
-      <Routes>
-        <Route path="/" element={<Layout />}>
+    <ThemeProvider>
+      <UserContextProvider>
+        <Routes>
+          <Route path="/" element={<Layout />}>
 
-          <Route index element={<HomePage />} />
+            <Route index element={<HomePage />} />
 
-          <Route path={'/login'} element={<LoginPage />} />
+            <Route path={'/login'} element={<LoginPage />} />
 
-          <Route path={'/register'} element={<Register />} />
+            <Route path={'/register'} element={<Register />} />
 
-          <Route path={'/create_post'} element={<CreatePost />} />
+            <Route path={'/create_post'} element={<CreatePost />} />
 
-          <Route path={'/create_post/:id'} element={<CreatePost />} />
+            <Route path={'/create_post/:id'} element={<CreatePost />} />
 
-          <Route path={'/post/:id'} element={<PostDetailsPage />} />
+            <Route path={'/post/:id'} element={<PostDetailsPage />} />
 
-        </Route>
+          </Route>
 
-      </Routes>
-    </UserContextProvider>
+        </Routes>
+      </UserContextProvider>
+    </ThemeProvider>
 
   );
 }
