@@ -3,7 +3,7 @@ import { FaUser, FaSignOutAlt, FaQuestionCircle, FaBookmark, FaRegFileAlt } from
 import './styles/UserMenu.css'; // Optional: for styling
 import UserAvatar from './UserAvatar';
 
-const UserMenu = ({username, profilePic}) => {
+const UserMenu = ({username, profilePic, logoutUser}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -24,10 +24,10 @@ const UserMenu = ({username, profilePic}) => {
         <div className="menu-dropdown">
           <ul>
             <li><FaUser /> Profile</li>
-            <li><FaSignOutAlt /> Sign Out</li>
-            <li><FaQuestionCircle /> Help</li>
             <li><FaRegFileAlt /> My Posts</li>
             <li><FaBookmark /> Saved Posts</li>
+            <li><FaQuestionCircle /> Help</li>
+            <li onClick={logoutUser}><FaSignOutAlt /> Sign Out</li>
           </ul>
         </div>
       )}

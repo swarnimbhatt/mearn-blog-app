@@ -53,7 +53,6 @@ export default function Header() {
             {username
                 ?
                 <div className="auth-buttons">
-                    <button onClick={logoutUser} className="login">Log out</button>
                     <Link to={"/create_post"}>
                         <div style={{ display: "flex", alignItems: "center" }}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" aria-label="Write">
@@ -64,8 +63,7 @@ export default function Header() {
                         </div>
                     </Link>
                     <ThemeSwitcher />
-                    <UserMenu username={firstName} profilePic={profilePic} show={""} />
-                    {/* <img src={"http://localhost:4000/uploads/users/9a6d105aa992162173bc1571a17b9bb5.jpg"} /> */}
+                    <UserMenu username={firstName} profilePic={profilePic} logoutUser={logoutUser} />
                 </div>
                 :
                 <div className="auth-buttons">
