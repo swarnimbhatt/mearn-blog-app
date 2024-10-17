@@ -14,3 +14,25 @@ export const MESSAGES = {
       NOT_FOUND: "The requested resource was not found.",
     }
   };
+ const LOGIN_BTN = "Log in"; 
+ const LOGOUT = "Log out"; 
+ const SIGN_UP = "Sign up"; 
+ const USERNAME = "Username";
+ const PASSWORD = "Password";
+ const CONFIRM_PASSWORD = "Confirm Password";
+ const FIRST_NAME = "First Name";
+ const LAST_NAME = "Last Name";
+ const EMAIL = "Email";
+
+ const READ_POST = "Read post";
+ const WRITE = "Write";
+ const TITLE = "Title";
+ const SUMMARY = "Summary";
+ const THUMBNAIL = "Thumbnail";
+ const CONTENT = "Content";
+ const CREATE_POST = "Create post";
+ const CREATE_NEW_POST = "Create new post";
+
+ const SEARCH = "Search";
+
+ 
